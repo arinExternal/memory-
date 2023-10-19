@@ -1,0 +1,350 @@
+
+ function SelectCampus(){
+
+          var campus_id = jQuery("select#select_campus").val();
+
+          var url = "https://salu.softcodic.com/?action=settings&selcampus="+campus_id;
+          
+          window.location = url;
+     }
+
+function uploadChallan( invoice_id ){
+
+            jQuery("input#challan_invoice_number").val(invoice_id);
+            jQuery("div#div_form").show("slow");
+            jQuery("div#my_invoices").hide("slow");
+  }
+
+function showCreteria( choice_id ){
+
+     
+
+     var master_cretera = jQuery("select#"+choice_id+" :selected").attr('data-creteria');
+     if (master_cretera.length > 1){ 
+         jQuery('div#'+choice_id+'_master_creteria').html("Elegiblity Creteria: "+master_cretera);
+     } else {
+         jQuery('div#'+choice_id+'_master_creteria').html('');
+     }
+}
+
+function addUserInvoice(inv_no, paid_date, doc_url){
+
+   var req_data = {
+
+                 inv_no  : inv_no, 
+
+                 paid_date  : paid_date, 
+
+                 doc_url   : doc_url,
+
+                 action   : LOCAL_PUBLIC.iaction
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+     jQuery("div#softcodic-loader").show();
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log(result);
+            
+                 jQuery("#form_adddchallan_success").show();
+                 jQuery("div#softcodic-loader").hide();
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            jQuery("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+
+
+}
+
+function addUpdateApplicantDocument(app_id, user_id, doc_id, doc_name, doc_url ){
+
+            
+            
+              var req_data = {
+
+                 app_id  : app_id,
+                 u_id  : user_id,
+                 doc_id  : doc_id, 
+
+                 doc_name  : doc_name, 
+
+                 doc_url   : doc_url,
+
+                 action   : LOCAL_PUBLIC.action
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log(result);
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+
+}
+
+
+function userMatricDocument(af_applicant_id, doc_url, af_matric_major, af_matric_bname,af_matric_passyear,af_matric_seatno,af_matric_obtmarks,af_matric_totalmarks){
+
+       var req_data = {
+
+                 app_id  : af_applicant_id,
+                 doc_id  : "document_matric_certificate", 
+                 doc_name  : "Matric Certificate", 
+                 doc_url   : doc_url,
+                 af_matric_major   : af_matric_major,
+                 af_matric_bname   : af_matric_bname,
+                 af_matric_passyear   : af_matric_passyear,
+                 af_matric_seatno   : af_matric_seatno,
+                 af_matric_obtmarks   : af_matric_obtmarks,
+                 af_matric_totalmarks   : af_matric_totalmarks,
+                 action   : "af_matric_record"
+
+              }
+
+               var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log(result);
+
+                 location.reload();
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+}
+
+ function addUpdateUserDocument(doc_id, doc_name, doc_url ){
+
+            
+            
+              var req_data = {
+
+                 doc_id  : doc_id, 
+
+                 doc_name  : doc_name, 
+
+                 doc_url   : doc_url,
+
+                 action   : LOCAL_PUBLIC.action
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 //console.log(result);
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+
+}
+
+
+
+function addDocumentProgress(){
+
+
+        var req_data = {
+
+                 doc_id  : "doc_id", 
+
+                 doc_name  : "doc_id", 
+
+                 doc_url   : "doc_id",
+
+                 action   : LOCAL_PUBLIC.action
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+
+    jQuery("div#softcodic-loader").show();
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log( result );
+
+                 jQuery("div#softcodic-loader").hide();
+                 jQuery("div#step_5").addClass('active').show(); 
+                       jQuery("div#step_4").slideUp(800,function() {
+                        jQuery(this).removeClass('active');
+                       jQuery("li#listep_4").removeClass("active").addClass("part-done"); 
+                       jQuery("li#listep_5").addClass("active"); 
+                });
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            jQuery("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+
+}
+       
+        /*
+
+          jQuery(document).ready(function() {
+             jQuery('#soaet_appplication_forms').DataTable();
+             
+             jQuery("div#soaet_appplication_forms_length").after('<div class="dataTables_length" id="soaet_appplication_forms_program" style="padding-left: 30px;"><label>Program: <select name="soaet_appplication_forms_program" id="soaet_appplication_forms_program" aria-controls="soaet_appplication_forms" class=""><option value="Bachlour">Bachlour</option><option value="Master">Master</option></select></label></div>');
+
+          }); */
+
+                          

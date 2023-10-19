@@ -1,0 +1,3383 @@
+(function( $ ) {
+	'use strict';
+
+	/**
+	 * All of the code for your public-facing JavaScript source
+	 * should reside in this file.
+	 *
+	 * Note: It has been assumed you will write jQuery code here, so the
+	 * $ function reference has been prepared for usage within the scope
+	 * of this function.
+	 *
+	 * This enables you to define handlers, for when the DOM is ready:
+	 *
+	 * $(function() {
+	 *
+	 * });
+	 *
+	 * When the window is loaded:
+	 *
+	 * $( window ).load(function() {
+	 *
+	 * });
+	 *
+	 * ...and/or other possibilities.
+	 *
+	 * Ideally, it is not considered best practise to attach more than a
+	 * single DOM-ready or window-load handler for a particular page.
+	 * Although scripts in the WordPress core, Plugins and Themes may be
+	 * practising this, we should strive to set a better example in our own work.
+	 */
+
+     var global_lastderee_major = "";
+     var global_lastderee = "";
+     var global_program   ="";
+     var applicationFormTable;
+     var meritListTable;
+     var isAppFinal = false;
+
+     
+
+
+    
+     jQuery(document).ready(function($) {
+
+        
+   
+        $(".dashboard_table_row").each(function(){
+           
+           var did = $(this).attr("data-id");
+           
+           var req_data = {
+
+                 id  : did, 
+                 action   : "action_dept_record"
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+      
+    
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                     console.log(result);
+
+                     var resp_array = result.split("::");
+
+
+                    if (resp_array[0] =="success") {
+
+                    $("div#2nd_choice_"+did).html(resp_array[1]);
+                    $("div#3rd_choice_"+did).html(resp_array[2]);
+                    $("div#4th_choice_"+did).html(resp_array[3]);
+                    $("div#5th_choice_"+did).html(resp_array[4]);
+                    $("div#6th_choice_"+did).html(resp_array[5]);
+                  }
+                    
+       
+          },
+
+        fail : function( response ) {
+
+           // console.log( response );
+            $("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      }); 
+
+
+      }); 
+      
+        
+
+      if ( PLUGIN_PUBLIC.is_afpage == 1 ){
+
+
+           applicationFormTable = jQuery("#soaet_appplication_forms").DataTable({
+            dom: 'Bfrtip',
+             buttons: [
+                'excel', 'pdf'
+             ],
+            "bPaginate": false,
+            "bLengthChange": false
+           });
+             var afstatus = $("li.af-tabs.current").attr("data-id");
+             populateApplicaitonFormTable(afstatus);  
+      }
+
+        if ( PLUGIN_PUBLIC.is_mlpage == 1 ){
+
+
+           meritListTable = jQuery("#soaet_meritlist").DataTable({
+            dom: 'Bfrtip',
+             buttons: [
+                'excel', 'pdf'
+             ],
+            "bPaginate": false,
+            "bLengthChange": false
+           });
+             var afstatus = $("li.ml-tabs.current").attr("data-id");
+             populateMeritListTable(afstatus);  
+      }
+
+
+
+       $("li.ml-tabs").on("click", function(){
+
+         
+           $("li.ml-tabs").removeClass("current");
+           $(this).addClass("current");
+
+           populateMeritListTable($(this).attr("data-id"));     
+      
+      });
+
+      
+     
+     $("select#mml_listno").on("change", function(){
+
+           var afstatus = $("li.ml-tabs.current").attr("data-id");
+           populateMeritListTable(afstatus);     
+
+      });
+
+      $("select#mml_program").on("change", function(){
+
+           var afstatus = $("li.ml-tabs.current").attr("data-id");
+           populateMeritListTable(afstatus);     
+
+      });
+
+
+      $("select#mml_campus").on("change", function(){
+
+           var afstatus = $("li.ml-tabs.current").attr("data-id");
+           populateMeritListTable(afstatus);     
+
+      });
+
+      $("select#mml_shift").on("change", function(){
+
+           var afstatus = $("li.ml-tabs.current").attr("data-id");
+           populateMeritListTable(afstatus);     
+
+      });
+
+      $("select#mml_department").on("change", function(){
+
+           var afstatus = $("li.ml-tabs.current").attr("data-id");
+           populateMeritListTable(afstatus);     
+
+      });
+
+
+
+
+      $("select#last_degree").on("change", function(){
+
+          if( $(this).val() == 'hsc' ){
+
+              $("div#div_majorgroup_input").hide();
+              $("div#div_majorgroup_select").show();
+
+          } else {
+
+              $("div#div_majorgroup_input").show();
+              $("div#div_majorgroup_select").hide();
+          }
+
+      });
+
+      $("a#delete_record").on("click", function(){
+
+           var id   =  $(this).attr('data-id');
+           var type =  $(this).attr('data-type');
+
+           var req_data = {
+
+                 id  : id, 
+                 type  : type, 
+                 action   : "action_delete_record"
+
+              }
+
+     //console.log(req_data);
+
+
+     var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     var ajx_success = false;
+    $("div#softcodic-loader").show();
+
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                    $("div#table_row_"+id).remove();
+                    $("div#softcodic-loader").hide();
+
+       
+          },
+
+        fail : function( response ) {
+
+           // console.log( response );
+            $("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+
+
+});
+
+
+      $("li.af-tabs").on("click", function(){
+
+         
+           $("li.af-tabs").removeClass("current");
+           $(this).addClass("current");
+
+           populateApplicaitonFormTable($(this).attr("data-id"));     
+      
+      });
+
+
+      $("select#select_program").on("change", function(){
+
+           var afstatus = $("li.af-tabs.current").attr("data-id");
+           populateApplicaitonFormTable(afstatus);     
+
+      });
+
+
+      $("select#select_campus").on("change", function(){
+
+           var afstatus = $("li.af-tabs.current").attr("data-id");
+           populateApplicaitonFormTable(afstatus);     
+
+      });
+
+      $("select#select_shift").on("change", function(){
+
+           var afstatus = $("li.af-tabs.current").attr("data-id");
+           populateApplicaitonFormTable(afstatus);     
+
+      });
+
+      $("select#select_department").on("change", function(){
+
+           var afstatus = $("li.af-tabs.current").attr("data-id");
+           populateApplicaitonFormTable(afstatus);     
+
+      });
+
+     
+      /*
+
+      $("select#select_af_status").on('change', function(){
+
+            var app_id = $(this).attr('data-aid');
+            var status = $(this).val();
+            //console.log(app_id+" "+status);
+
+           var conf_res =  confirm("Are you sure to change status to "+status+" ?");
+
+           if ( conf_res ){
+
+               //console.log(conf_res);
+           }
+      }); */
+
+
+
+
+      if( $('#af_birth_date').length ){
+        $('#af_birth_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+
+      if( $('#challan_paid_date').length ){
+          $('#challan_paid_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+
+      
+
+      if( $('#bachelor_admission_start_date').length ){
+        $('#bachelor_admission_start_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+      if( $('#bachelor_admission_end_date').length ){
+        $('#bachelor_admission_end_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+
+      if( $('#entry_test_bachelor_date').length ){
+        $('#entry_test_bachelor_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+      if( $('#bachelor_entry_test_challan_date').length ){
+        $('#bachelor_entry_test_challan_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+
+
+      if( $('#master_admission_start_date').length ){
+        $('#master_admission_start_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+      if( $('#master_admission_end_date').length ){
+        $('#master_admission_end_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+
+      if( $('#master_test_bachelor_date').length ){
+        $('#master_test_bachelor_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }
+
+      if( $('#master_entry_test_challan_date').length ){
+        $('#master_entry_test_challan_date').datepicker({format: 'mm-dd-yyyy', autoclose:true});
+      }      
+      
+       
+      $("a#af_upload_imagelink").on("click", function(){
+
+           $("input#af_image").click();
+      });
+
+      $('#af_image').on('change', function(){
+
+        if ( this.files[0].type == 'image/jpg' || this.files[0].type == 'image/jpeg'  || this.files[0].type == "image/png" ){
+
+
+          $("img#af_user_image").attr("src",window.URL.createObjectURL(this.files[0]));
+          $("div.photo-upload-content-area").hide();
+          $("img#af_user_image").show();
+          $("div#image-validate-error").hide();
+
+      } else {
+         $("input#af_image").val('');
+         alert("Only jpg/jpeg and png files are allowed!");
+      }
+
+
+
+     });
+
+     
+      $("input#user_login").on('input', function(){ 
+           
+           if( $(this).val().length>4 && $.isNumeric($(this).val()) ){
+           	$(this).mask('00000-0000000-0');
+           } else if( $(this).val().length < 4 ){
+            $(this).unmask();
+           }
+
+      });
+
+
+       $("input[type=search]").on('input', function(){ 
+           
+           if( $(this).val().length>4 && $.isNumeric($(this).val()) ){
+            $(this).mask('00000-0000000-0');
+           } else if( $(this).val().length < 4 ){
+            $(this).unmask();
+           }
+
+      });
+
+
+      $(".step1-substeps").on("click", function(){
+               //console.log($(this).attr("id"));
+              if($(this).hasClass('subpart-active') || $(this).hasClass('subpart-done')){
+                //$("div#softcodic-loader").show();
+                if( $("div.panel-collapse.collapse.in").attr("id") == "collapse"+$(this).attr("id").split("g")[1] ){
+
+                   return false;
+
+                } else{ 
+                      $("div.panel-collapse.collapse.in").slideUp(800,function(){
+                          $(this).removeClass('in');
+                      });
+                      $("div#collapse"+$(this).attr("id").split("g")[1]).addClass("in").slideDown(800,function(){
+
+                         $("form :visible").find('input[type=text],textarea,select,input[type=radio]').first().focus();
+                      });
+                     }
+             } else {
+
+                $("button[type='submit']").focus();
+             }
+      });
+
+
+      $("li.softcodicli").on("click", function(){
+                
+             if( isAppFinal ) return;
+             
+             if($(this).hasClass('active') || $(this).hasClass('part-done')){
+                //$("div#softcodic-loader").show();
+                $("div.steps.active").removeClass('active').hide();
+                $("div#"+$(this).attr("id").split("i")[1]).show("slow",function(){
+                    
+                  $(this).addClass('active');
+                  $("form :visible").find('input[type=text],textarea,select,input[type=radio]').first().focus();
+               });
+
+             } else {
+
+                $("button[type='submit']").focus();
+                $("button#upload_doc_btn").focus();
+             }
+
+             
+      });
+
+
+      $("a#add_new_link").on("click", function(){
+
+          $("div#div_list").hide("slow");
+          $("div#div_form").show("slow");
+      });
+
+     
+
+     /*
+
+      $("button#step1_step_2_next, button#step2_step_3_next, button#step3_step_4_next").on("click", function(){
+
+             $("div.steps.active").removeClass('active').hide();
+                $("div#step_"+$(this).attr("id").split("_")[2]).show("slow",function(){
+                    
+                  $(this).addClass('active');
+                  $("form :visible").find('input[type=text],textarea,select,input[type=radio]').first().focus();
+               });
+
+      });
+       
+
+      $("button#step1_Two_next, button#step1_Three_next").on("click",function(){
+
+           $("div.panel-collapse.collapse.in").slideUp(800,function(){
+                          $(this).removeClass('in');
+            });
+          $("div#collapse"+$(this).attr("id").split("_")[1]).addClass("in").slideDown(800,function(){
+              $("form :visible").find('input[type=text],textarea,select,input[type=radio]').first().focus();
+          });
+                     
+
+      });
+      */
+      
+      /*$(".pinfo-tab").on('click', function(){
+              
+              $("button[type='submit']").focus();
+      });*/
+
+      $("form input.form-control").on('focus', function(){
+          $(this).removeClass('invalid');
+      });
+
+      $("form select.form-control").on('focus', function(){
+          $(this).removeClass('invalid');
+      });
+     
+      $('form input.required').on('focus', function () {
+				 $(this).removeClass('invalid');
+	    });
+
+      $('form input.mrequired').on('focus', function () {
+         $(this).removeClass('invalid');
+      });
+
+	  $('form select.required').on('focus', function () {
+				$(this).removeClass('invalid');
+	  });
+
+
+
+    
+       $("input[name='programOptions']").on('change', function(){
+
+             var pres = confirm("are you sure to change program to " + $(this).val() + " ?");
+              
+              if ( pres ){
+
+              var req_data = {
+
+                 program  : $(this).val(), 
+                 action   : "action_update_status"
+
+              }
+
+              var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     
+     var ajx_success = false;
+     jQuery("div#softcodic-loader").show();
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log(result);
+                 location.reload();
+            
+                 
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            jQuery("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+              
+              } else {
+                
+                if ( $(this).val() == "Master"){
+
+                     $(this).removeAttr("checked");
+                     $("input#bachelorsProgram").attr("checked","checked");
+
+                } else if( $(this).val() == "Bachelor"){
+
+                     $(this).removeAttr("checked");
+                     $("input#masterProgram").attr("checked","checked");
+
+                }
+
+                console.log("no");
+                return false;
+              }
+             
+       });
+
+
+       $("input[name='shiftOptions']").on('change', function(){
+
+             
+              var pres = confirm("are you sure to change shift to " + $(this).val() + " ?");
+              
+              if ( pres ){
+
+              var req_data = {
+
+                 shift  : $(this).val(), 
+                 action   : "action_update_status"
+
+              }
+
+              var ajx_url = LOCAL_PUBLIC.ajx_req_url;
+
+     
+     var ajx_success = false;
+     jQuery("div#softcodic-loader").show();
+    
+    jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+        beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', LOCAL_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 console.log(result);
+                 location.reload();
+            
+                 
+       
+          },
+
+        fail : function( response ) {
+
+            console.log( response );
+            jQuery("div#softcodic-loader").hide();
+            
+         },
+
+        dataType: 'text'
+
+      });
+
+              
+              } else {
+                
+                if ( $(this).val() == "Morning"){
+
+                     $(this).removeAttr("checked");
+                     $("input#morningShift").attr("checked","checked");
+
+                } else if( $(this).val() == "Evening"){
+
+                     $(this).removeAttr("checked");
+                     $("input#morningShift").attr("checked","checked");
+
+                }
+
+                console.log("no");
+                return false;
+              }
+             
+       });
+
+
+     /*
+
+       $("input[name='programOptions']").on('click', function(){
+              
+              if ( $(this).val() ==="Master" ){
+
+              	  $("div#record_for_master").show();
+
+              } else {
+              
+                  $("div#record_for_master").hide();
+
+              }
+       }); */
+
+
+
+
+
+	  $("#same_permanent_address").on('click', function(){
+      
+          if( $(this).is(':checked') ){
+
+          	   $("input#af_paddress").val($("input#af_address").val()).removeClass('invalid');
+          	   $("input#af_paddress_po").val($("input#af_address_po").val()).removeClass('invalid');
+          	   $("input#af_paddress_taluka").val($("input#af_address_taluka").val()).removeClass('invalid');
+          	   $("select#af_paddress_district").val($("select#af_address_district").val()).removeClass('invalid');
+          
+          } else {
+               
+               //$("input#af_paddress").val("");
+          	   //$("input#af_paddress_po").val("");
+          	   //$("input#af_paddress_taluka").val("");
+          	   //$("input#af_paddress_district").val("");
+
+          }
+
+	  });
+
+
+
+    $("#change_user_pass").on("submit", function(e){
+
+       var returnValue = validateForm( 'change_user_pass', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                console.log(responseText);
+                $("div#softcodic-loader").hide();
+                $("p.message-success").show();
+                $("p.message-success").html(responseText);
+
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+   });
+
+    
+
+    $("#form_selectcampus").on("submit", function(e){
+
+       var returnValue = validateForm( 'form_selectcampus', $(this) );
+
+         if ( !$("input#read_criteria").is(":checked") ){
+
+             $("input#read_criteria").addClass('cinvalid');
+             returnValue = false;
+         } 
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#form_selectcampus_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                if(responseText == "success"){
+
+                  location.reload();
+
+                }   else {
+
+                   $("div#form__error_msgs").html(responseText);
+                   $("div#form_adduser_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+   });
+
+
+
+    $("#form_adddegree").on("submit", function(e){
+
+       var returnValue = validateForm( 'form_adddegree', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#form_adddegree_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                var response_array = responseText.split("::");
+
+                if( response_array[0] == 'success' ) {
+                
+                $("div#soaets_degrees").append('<div class="table_row">'+
+                        '<div class="table_small"><div class="table_cell">Degree</div>'+
+                        '<div class="table_cell">'+$("input#degree_name").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Department</div>'+
+                        '<div class="table_cell">'+$("select#department :selected").text()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Type</div>'+
+                        '<div class="table_cell">'+$("select#degree_level :selected").text()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Merit Seats</div>'+
+                        '<div class="table_cell">'+$("input#degree_mseats").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">SF Seats</div>'+
+                        '<div class="table_cell">'+$("input#degree_sfseats").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Actions</div>'+
+                        '<div class="table_cell"><a class="btn-primary btn-sm" id="delete_record" data-id="'+response_array[1]+'" data-type="degree">Delete</a></div><div>'+
+                        '</div>');
+              $("div#div_list").show("slow");
+              $("div#div_form").hide("slow");
+              $("div#form_adddegree_success").show();
+
+                    /*$("div#collapseTwo").slideUp(800,function() {
+                            $(this).removeClass("in");
+                          $(this).parent().children("h3").addClass("subpart-done");
+                           if( !$("div#step1-substep3").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep3").children("h3").addClass("subpart-active");
+                           }
+
+                     });
+                    $("div#collapseThree").addClass("in");
+                    $("input#af_address").focus();*/
+                    
+
+                }   else {
+
+                   $("div#form_adduser_error_msgs").html(responseText);
+                   $("div#form_adduser_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+   });
+
+
+
+   $("#form_addcampus").on("submit", function(e){
+
+       var returnValue = validateForm( 'form_addcampus', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#form_addcampus_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                var response_array = responseText.split("::");
+
+                if( response_array[0] == 'success' ) {
+                
+                $("div#soaets_departments").append('<div class="table_row">'+
+                        '<div class="table_small"><div class="table_cell">Campus Name</div>'+
+                        '<div class="table_cell">'+$("input#campus_name").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Degree Level</div>'+
+                        '<div class="table_cell">'+$("select#degree_level :selected").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Actions</div>'+
+                        '<div class="table_cell"><a class="btn-primary btn-sm" id="delete_record" data-id="'+response_array[1]+'" data-type="campus">Delete</a></div><div>'+
+                        '</div>');
+              $("div#div_list").show("slow");
+              $("div#div_form").hide("slow");
+              $("div#form_addcampus_success").show();
+
+                    /*$("div#collapseTwo").slideUp(800,function() {
+                            $(this).removeClass("in");
+                          $(this).parent().children("h3").addClass("subpart-done");
+                           if( !$("div#step1-substep3").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep3").children("h3").addClass("subpart-active");
+                           }
+
+                     });
+                    $("div#collapseThree").addClass("in");
+                    $("input#af_address").focus();*/
+                    
+
+                }   else {
+
+                   $("div#form_adduser_error_msgs").html(responseText);
+                   $("div#form_adduser_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+   });
+
+   
+
+   $("#form_adddepartment").on("submit", function(e){
+
+       var returnValue = validateForm( 'form_adddepartment', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#form_adddepartment_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                var response_array = responseText.split("::");
+
+                if( response_array[0] == 'success' ) {
+                
+                $("div#soaets_departments").append('<div class="table_row">'+
+                        '<div class="table_small"><div class="table_cell">Department/Program</div>'+
+                        '<div class="table_cell">'+$("input#department_name").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Bachelor Shift(s)</div>'+
+                        '<div class="table_cell">'+$("select#shift :selected").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Master Shift(s)</div>'+
+                        '<div class="table_cell">'+$("select#mastershift :selected").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Degree Level</div>'+
+                        '<div class="table_cell">'+$("select#degree_level :selected").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Actions</div>'+
+                        '<div class="table_cell"><a class="btn-primary btn-sm" id="delete_record" data-id="'+response_array[1]+'" data-type="department">Delete</a></div><div>'+
+                        '</div>');
+              $("div#div_list").show("slow");
+              $("div#div_form").hide("slow");
+              $("div#form_adddepartment_success").show();
+
+                    /*$("div#collapseTwo").slideUp(800,function() {
+                            $(this).removeClass("in");
+                          $(this).parent().children("h3").addClass("subpart-done");
+                           if( !$("div#step1-substep3").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep3").children("h3").addClass("subpart-active");
+                           }
+
+                     });
+                    $("div#collapseThree").addClass("in");
+                    $("input#af_address").focus();*/
+                    
+
+                }   else {
+
+                   $("div#form_adduser_error_msgs").html(responseText);
+                   $("div#form_adduser_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+   });
+
+
+   $("#change_pass").on('submit', function(e){
+      
+       var valid = true;    
+       let $pw = $('input[name=password]');
+       let $repeat_pw = $('input[name=repeat_password]');
+
+
+
+        if ($pw.val() !== $repeat_pw.val() || $pw.val().length < 8 ) {
+          $pw.addClass('invalid');
+          $repeat_pw.addClass('invalid');
+          valid = false;
+        }
+
+       if( !valid ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+       var $form = $(this);
+
+
+      //console.log($form.serialize());
+
+     // before request
+
+      var ajxSuccess = false;
+
+     $("div#softcodic-loader").show();
+     $(".message-success").hide();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+                     //console.log(responseText);
+
+                     $(".message-success").show();
+                    
+                }    else {
+
+                 //console.log(responseText);
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+        complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+
+
+
+   });
+
+
+   $("#form_adduser").on('submit', function(e){
+
+       var returnValue = validateForm( 'form_adduser', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+      var $form = $(this);
+
+      var ajxSuccess = false;
+
+
+      $("div#form_adduser_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                var response_array = responseText.split("::");
+
+                if( response_array[0] == 'success' ) {
+                
+                $("div#soaets_users").append('<div class="table_row">'+
+                        '<div class="table_small"><div class="table_cell">Name</div>'+
+                        '<div class="table_cell">'+$("input#full_name").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">User Login</div>'+
+                        '<div class="table_cell">'+$("input#user_name").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Email</div>'+
+                        '<div class="table_cell">'+$("input#user_email").val()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Role</div>'+
+                        '<div class="table_cell">'+$("select#user_role :selected").text()+'</div></div>'+
+                        '<div class="table_small"><div class="table_cell">Actions</div>'+
+                        '<div class="table_cell"><a class="btn-primary btn-sm" id="delete_record" data-id="'+response_array[1]+'" data-type="user">Delete</a></div><div>'+
+                        '</div>');
+              $("div#div_list").show("slow");
+              $("div#div_form").hide("slow");
+              $("div#form_adduser_success").show();
+
+                    /*$("div#collapseTwo").slideUp(800,function() {
+                            $(this).removeClass("in");
+                          $(this).parent().children("h3").addClass("subpart-done");
+                           if( !$("div#step1-substep3").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep3").children("h3").addClass("subpart-active");
+                           }
+
+                     });
+                    $("div#collapseThree").addClass("in");
+                    $("input#af_address").focus();*/
+                    
+
+                }   else {
+
+                   $("div#form_adduser_error_msgs").html(responseText);
+                   $("div#form_adduser_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+
+
+
+ });
+
+
+   $("#form_settings").on('submit', function(e){
+
+       var returnValue = validateForm( 'form_settings', $(this) );
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+       var $form = $(this);
+
+
+      //console.log($form.serialize());
+
+     // before request
+
+      var ajxSuccess = false;
+
+     $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+                     //console.log(responseText);
+                    
+                }    else {
+
+                  //console.log(responseText);
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+        complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+
+
+
+
+
+
+   });
+
+
+
+
+	 $('#af_personalinfo1').on('submit', function(e) {
+         var returnValue = validateForm( 'af_personalinfo1', $(this) );
+		
+        
+       
+
+       if( !returnValue ){
+       	    //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+       var $form = $(this);
+
+       var fData = new FormData(this);
+      
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_personalinfo1_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+			  type: "POST",
+
+			  url: $form.attr('action'),
+
+			  data: fData,
+        processData: false,
+        contentType: false,
+
+			  success: function( responseText ) {
+
+               console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+		              $("div#collapseOne").slideUp(800,function() {
+		                   $(this).removeClass("in");
+                       //$(".panel-heading-step1-part1").append('<i class="fa fa-check" area-hidden="true"></i>');
+		                   $(this).parent().children("h3").addClass("subpart-done");
+                       if( !$("div#step1-substep2").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep2").children("h3").addClass("subpart-active");
+                       }
+                  });
+
+		              $("div#collapseTwo").addClass("in"); 
+		              $("input#af_father_name").focus(); 
+                    
+
+                }  else if(responseText === "nic-exits"){ 
+
+                   $("div#af_personalinfo1_error_msgs").html('NIC or B-Form already exits, if you think this is a mistake contact admissions@salu.edu.pk');
+                   $("div#af_personalinfo1_error_msgs").show(); 
+                     
+               } else if(responseText === "image-error"){ 
+
+                   $("div#af_personalinfo1_error_msgs").html('Error Occurred while uploading image! Only jpg/jpeg and png files are allowed!');
+                   $("div#af_personalinfo1_error_msgs").show(); 
+                     
+                } else {
+
+                    //console.log(responseText);
+                    $("div#af_personalinfo1_error_msgs").html('Oops something went wrong');
+                    $("div#af_personalinfo1_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+			  	
+
+			  },
+
+
+
+			  fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+				        if(!ajxSuccess){
+
+				        	 $("div#softcodic-loader").hide();
+				            // console.log('Oops something went wrong');
+
+				        }
+
+               },
+
+
+
+			  dataType: 'text'
+
+      });
+
+
+
+
+
+	});
+
+
+    $('#af_personalinfo2').on('submit', function(e) {
+       //  console.log("form submitted");
+		 var returnValue = validateForm( 'af_personalinfo2', $(this) );
+		
+        
+       
+
+       if( !returnValue ){
+       	    //prevent broser to refresh
+            e.preventDefault();
+           return false;
+       }
+
+
+
+       var $form = $(this);
+
+
+      // console.log($form.serialize());
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_personalinfo2_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+			  type: "POST",
+
+			  url: $form.attr('action'),
+
+			  data: $form.serialize(),
+
+			  success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+		                $("div#collapseTwo").slideUp(800,function() {
+                            $(this).removeClass("in");
+                          $(this).parent().children("h3").addClass("subpart-done");
+                           if( !$("div#step1-substep3").children("h3").hasClass("subpart-done") ){
+                            
+                            $("div#step1-substep3").children("h3").addClass("subpart-active");
+                           }
+
+                     });
+                    $("div#collapseThree").addClass("in");
+                    $("input#af_address").focus();
+                    
+
+                }  else if(responseText === "nic-exits"){ 
+
+                   $("div#af_personalinfo2_error_msgs").html('NIC or B-Form already exits, if you think this is a mistake contact info@saus.edu.pk');
+                   $("div#af_personalinfo2_error_msgs").show(); 
+                     
+                } else {
+
+                   $("div#af_personalinfo2_error_msgs").html('Oops something went wrong');
+                   $("div#af_personalinfo2_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+			  	
+
+			  },
+
+
+
+			  fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+				        if(!ajxSuccess){
+
+				        	 $("div#softcodic-loader").hide();
+				             //console.log('something went wrong');
+
+				        }
+
+               },
+
+
+
+			  dataType: 'text'
+
+      });
+
+
+
+      
+      
+       
+
+
+	});
+
+
+	$('#af_personalinfo3').on('submit', function(e) {
+         //console.log("form submitted");
+		 var returnValue = validateForm( 'af_personalinfo3', $(this) );
+		
+        
+       
+
+       if( !returnValue ){
+       	    //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+       
+
+      var $form = $(this);
+
+
+      // console.log($form.serialize());
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_personalinfo3_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+			  type: "POST",
+
+			  url: $form.attr('action'),
+
+			  data: $form.serialize(),
+
+			  success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+		       
+		           $("div#step_2").addClass('active').show(); $("input[name='programOptions']:checked").focus();
+               $("div#step_1").slideUp(800,function() {
+                $(this).removeClass('active');
+               $("li#listep_1").removeClass("active").addClass("part-done"); 
+               if( !$("li#listep_2").hasClass("part-done") ){
+                   $("li#listep_2").addClass("active"); 
+               }
+
+               //$("div#collapseThree").addClass("part-done");
+
+
+        });
+                    
+
+                }   else {
+
+
+                    //console.log(responseText);
+                    $("div#af_personalinfo3_error_msgs").html('Oops something went wrong');
+                    $("div#af_personalinfo3_error_msgs").show();
+                    //to-do latter
+                }
+
+			  	
+
+			  },
+
+
+
+			  fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+				        if(!ajxSuccess){
+
+				        	 $("div#softcodic-loader").hide();
+				             //console.log('something went wrong');
+
+				        }
+
+               },
+
+
+
+			  dataType: 'text'
+
+      });
+
+
+
+
+
+
+
+       
+
+
+	});
+
+
+	$('#af_acedemic').on('submit', function(e) {
+         //console.log("form submitted");
+		 var returnValue = validateForm( 'af_acedemic', $(this) );
+		
+        
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+       var $form = $(this);
+
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_acedemic_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     
+
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+
+                      global_program =   $("input[name='programOptions']:checked").val();
+                      global_lastderee_major  = $("select#af_lastdegree_major_select").val();
+                      global_lastderee  = $("select#last_degree").val();
+
+                      //$("input[name='programOptions']").attr("disabled","disabled");
+
+                     
+                     /* if (global_program == "Master"){
+
+                         $("div.bechloursonly").remove();
+                         $("div.document_Master").remove();
+                      
+
+                      }  else {
+
+                         $("div.document_Bachelor").remove();
+                      } */
+
+
+                     $("select.departmentchoice option").each(function(){
+
+                        /*  if ( ( $(this).parent().attr("id") == 'af_department_1stchoice' 
+                                || $(this).parent().attr("id") == 'af_department_2stchoice') 
+                              && $(this).val() !== "" && $(this).attr("data-type") !== global_program){
+                                  
+                                  $(this).remove();
+
+                                  // console.log($(this).val());
+
+ 
+                               
+                          }   
+
+
+                          console.log(global_program); */
+
+
+                          //console.log(global_program);
+                          //console.log(global_lastderee_major);
+                          //console.log(global_lastderee);
+
+                          if ( $(this).val() =="" ){
+                            $(this).prop('selected', true);
+                          }
+
+
+                           if (global_program == "Bachelor"){
+                                 
+                                 
+
+                                var deptid = $(this).val().split("::")[0];
+
+                                if( global_lastderee =="hsc"){
+
+                                   if( deptid == 36 ||  deptid == 37 || deptid == 38){
+                
+                                        $(this).attr("disabled","disabled");
+
+                                   } else if($(this).attr("data-neligble")){
+
+                                     var nearray = $(this).attr("data-neligble").split("::");
+
+                                     if( nearray.includes(global_lastderee_major) ){
+
+                                         $(this).attr("disabled","disabled");
+                                        // $(this).text( $(this).text() );
+                                        // console.log($(this).val()+"-"+$(this).attr("data-neligble"));
+                                     } else {
+                                  
+                                    $(this).removeAttr("disabled","disabled");
+
+                                    }
+
+                                 } else {
+                                  
+                                    $(this).removeAttr("disabled","disabled");
+
+                                 }
+
+
+                                } else  if( global_lastderee =="bachelor"){
+
+                                   if( deptid == 36 || deptid == 37 || deptid == 38){
+                
+                                        $(this).removeAttr("disabled","disabled");
+                                  
+                                   } else {
+
+                                       
+                                      if( $(this).val() == ""){
+
+                                       } else {
+
+                                        $(this).attr("disabled","disabled");
+                                      }
+                                   }
+
+
+                                } else if( global_lastderee =="master"){
+
+                                   if( deptid == 36){
+                
+                                        $(this).removeAttr("disabled","disabled");
+                                  
+                                   } else {
+                                    
+                                        if( $(this).val() == ""){
+
+                                       } else {
+
+                                        $(this).attr("disabled","disabled");
+                                     }
+                                   }
+
+
+                                }
+                                
+                            }     
+
+                         
+
+
+                     });
+
+           
+               $("div#step_3").addClass('active').show(); $("select#af_department_1stchoice").focus();
+               $("div#step_2").slideUp(800,function() {
+                     $(this).removeClass('active');
+                     $("li#listep_2").removeClass("active").addClass("part-done"); 
+                     //if( !$("li#listep_3").hasClass("part-done") ){
+                         $("li#listep_3").addClass("active"); 
+                         $("li#listep_4").removeClass("active");
+                         $("li#listep_5").removeClass("active");
+                     //}
+                });
+
+
+                    
+
+                }   else {
+
+
+                    //console.log(responseText);
+                    $("div#af_acedemic_error_msgs").html('Oops something went wrong');
+                    $("div#af_acedemic_error_msgs").show();
+                    //to-do latter
+                }
+
+          
+
+        },
+
+              error: function(e) {
+                   // console.log(e);
+               },
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+
+                     
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+       
+
+
+	});
+
+   
+
+   $('#af_departments_choices').on('submit', function(e) {
+       //  console.log("form submitted");
+     var returnValue = validateForm( 'af_departments_choices', $(this) );
+    
+        
+       
+
+       if( !returnValue ){
+            //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+
+
+       var $form = $(this);
+
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_departments_choices_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     
+
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+
+                $("#update_choices_btn").attr("disabled","disabled");
+                $("div#af_departments_choices_error_msgs").html('You have successfully updated choices.');
+                $("div#af_departments_choices_error_msgs").show();
+                     
+
+           
+              /* $("div#step_4").addClass('active').show(); $("input[name='programOptions']:checked").focus();
+               $("div#step_3").slideUp(800,function() {
+                $(this).removeClass('active');
+               $("li#listep_3").removeClass("active").addClass("part-done"); 
+               if( !$("li#listep_4").hasClass("part-done") ){
+                         $("li#listep_4").addClass("active"); 
+               } 
+
+
+        }); */
+
+
+                    
+
+                }   else {
+
+                   //console.log(responseText);
+                   $("div#af_departments_choices_error_msgs").html('Oops something went wrong');
+                   $("div#af_departments_choices_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+              error: function(e) {
+                    //console.log(e);
+               },
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+
+                     
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+       
+
+
+
+
+      
+
+  });
+		
+
+    $('#af_departments').on('submit', function(e) {
+       //  console.log("form submitted");
+		 var returnValue = validateForm( 'af_departments', $(this) );
+		
+        
+       
+
+       if( !returnValue ){
+       	    //prevent broser to refresh
+            e.preventDefault();
+            return false;
+       }
+
+
+
+
+
+       var $form = $(this);
+
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#af_departments_error_msgs").hide();
+      $("div#softcodic-loader").show();
+
+     
+
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                if( responseText == 'success' ) {
+                     
+
+                     
+
+                     
+
+           
+               $("div#step_4").addClass('active').show(); $("input[name='programOptions']:checked").focus();
+               $("div#step_3").slideUp(800,function() {
+                $(this).removeClass('active');
+               $("li#listep_3").removeClass("active").addClass("part-done"); 
+               if( !$("li#listep_4").hasClass("part-done") ){
+                         $("li#listep_4").addClass("active"); 
+               }
+
+
+        });
+
+
+                    
+
+                }   else {
+
+                   //console.log(responseText);
+                   $("div#af_departments_error_msgs").html('Oops something went wrong');
+                   $("div#af_departments_error_msgs").show();
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+              error: function(e) {
+                    //console.log(e);
+               },
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+
+                     
+                     //console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+       
+
+
+
+
+      
+
+	});
+
+
+
+    
+
+
+    $('#af_finalstep').on('submit', function(e) {
+         //console.log("form submitted");
+         //var returnValue = validateForm( 'af_finalstep', $(this) );
+    
+         var returnValue = true;
+
+         if ( !$("input#af_finalize").is(":checked") ){
+
+             $("input#af_finalize").addClass('cinvalid');
+             returnValue = false;
+         } 
+       
+
+       if( !returnValue ){
+            //prevent broser to refresh
+           e.preventDefault();
+           return false;
+       }
+
+
+
+       var $form = $(this);
+
+
+//       console.log($form.serialize());
+
+     // before request
+
+      var ajxSuccess = false;
+
+      $("div#softcodic-loader").show();
+
+     $.ajax({
+
+        type: "POST",
+
+        url: $form.attr('action'),
+
+        data: $form.serialize(),
+
+        success: function( responseText ) {
+
+                //console.log( responseText );
+
+                ajxSuccess = true;
+
+                $("div#softcodic-loader").hide();
+
+                
+                if( responseText == 'success' ) {
+
+                  isAppFinal = true;
+                  $("div#step_6").addClass('active').show(); $("input[name='programOptions']:checked").focus();
+                  $("div#step_5").slideUp(800,function() {
+                      $(this).removeClass('active');
+                  //$("li#step4").removeClass("active").addClass("part-done"); 
+
+
+                });
+                    
+
+                }  else {
+
+                 // console.log(responseText);
+                   
+                    //to-do latter
+                }
+
+          
+
+        },
+
+
+
+        fail : function( response ) {
+
+                         $("div#softcodic-loader").hide();
+                         //console.log( response );
+                },
+
+
+              complete: function(){
+
+                  
+                if(!ajxSuccess){
+
+                   $("div#softcodic-loader").hide();
+                    // console.log('something went wrong');
+
+                }
+
+               },
+
+
+
+        dataType: 'text'
+
+      });
+
+
+
+      
+      
+       
+
+
+  });
+
+
+
+
+
+
+    
+
+
+ }); 
+
+
+
+     $('input#user_cell').mask('0300-0000000');
+     $('input#af_address_contactno').mask('0300-0000000');
+     $('input#af_father_contactno').mask('0300-0000000');
+     $('input#cnic_number').mask('00000-0000000-0');
+     $('input#af_cnic_bform').mask('00000-0000000-0');
+
+      
+
+    
+     
+    function validateMarks(form, degree){
+
+            // console.log(degree);
+
+            if (degree == 'Bachelor') { 
+            var matric_obtmarks =  $("input#af_matric_obtmarks").val();
+            var matric_totalmarks =  $("input#af_matric_totalmarks").val();
+            var matric_per = parseFloat(matric_obtmarks)/parseFloat(matric_totalmarks)*parseFloat(100);
+            
+            
+            if ( matric_per < parseFloat(33)  || matric_per > parseFloat(100) ){ 
+                  
+                  $("input#af_matric_obtmarks").addClass('invalid');
+                  $("input#af_matric_totalmarks").addClass('invalid');
+                  return false;
+            }
+
+          }
+           
+            var lastdegree_obtmarks =  $("input#af_lastdegree_obtmarks").val();
+            var lastdegree_totalmarks =  $("input#af_lastdegree_totalmarks").val();
+            var ld_hsc_per = $("input#ld_min_percentage").val();
+           
+            var retunValue = true;
+
+            var lastdegree_per = parseFloat(lastdegree_obtmarks)/parseFloat(lastdegree_totalmarks)*parseFloat(100);
+            var ld_min_per = $("input#ld_min_percentage").val();
+
+            //console.log(lastdegree_per+" - "+ld_min_per);
+           
+            if ( lastdegree_per < parseFloat(ld_min_per)  || lastdegree_per > parseFloat(100) ){ 
+                  
+                  $("input#af_lastdegree_obtmarks").addClass('invalid');
+                  $("input#af_lastdegree_totalmarks").addClass('invalid');
+                  retunValue = false;
+            }
+
+           
+          
+
+
+          return retunValue;
+   
+   
+
+    }
+
+
+    function populateMeritListTable( afstatus ){
+
+             if ( afstatus == ""){
+
+              afstatus = "Pending";
+          }
+
+          var program =    $("select#mml_program :selected").val();
+          var year =       $("select#mml_year :selected").val();
+          var campus =     $("select#mml_campus :selected").val();
+          var shift =      $("select#mml_shift :selected").val();
+          var department = $("select#mml_department :selected").val();
+          var listno =     $("select#mml_listno :selected").val();
+
+          var req_data = { 
+
+                 program  : program, 
+                 afstatus : afstatus,
+                 year       : year,
+                 campus     : campus,
+                 shift      : shift,
+                 department : department,
+                 listno : listno,
+
+                 action   : 'action_view_meritlist'
+
+             }
+
+
+             //console.log(req_data);
+
+          var ajx_url = PLUGIN_PUBLIC.ajx_req_url;
+
+          var ajx_success = false;
+
+          var table = meritListTable;
+
+          $("div#softcodic-loader").show();
+
+      jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+          beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', PLUGIN_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 ajx_success = true;
+                 console.log("i am successfull");
+
+                 table.clear().draw();
+                 $("div#softcodic-loader").hide();
+                
+
+                
+                 if( result.response == "success" ) {
+
+
+              if( result.data.length > 0){
+
+
+                 for(var i=0; i< result.data.length; i++){
+
+                        console.log(i);
+                        let applicant = result.data[i];
+
+                       let drow = jQuery('<tr>'+
+                          '<td>'+applicant.cnic+'</td>'+
+                          '<td>'+applicant.name+' D/S/O <br />'+applicant.father_name+'</td>'+
+                          '<td>'+applicant.mobile+'</td>'+
+                          '<td>'+applicant.department+'</td>'+
+                          '<td>'+applicant.bname+'</td>'+
+                          '<td>'+applicant.percentage_matric+'/'+applicant.percentage_inter+'/'+applicant.percentage_total+'</td>'+
+                          '<td>'+applicant.invoice+'</td>'+
+                          '<td>'+applicant.payment_status+'</td>'+
+                       '</tr>'); 
+
+                      table.row.add(drow);
+                }
+
+                   table.draw();
+
+             
+
+
+ } //length
+
+  
+}
+
+           
+},
+
+        fail : function( response ) {
+
+            //console.log( response );
+            $("div#softcodic-loader").hide();
+
+         },
+
+
+
+        complete: function(){
+
+
+            console.log("i am complete now");
+
+            $("div#softcodic-loader").hide();
+
+            
+
+            $("select#meritlist_payment_status").on('change', function(){
+
+            var app_id = $(this).attr('data-aid');
+            var status = $(this).val();
+            //console.log(app_id+" "+status);
+
+           var conf_res =  confirm("Are you sure to change payment status to "+status+" ?");
+
+           if ( conf_res ){
+              
+              updateAdmissionPaymentStatus( app_id, status );
+               
+           } else {
+
+             $(this).val($.data(this, 'current'));
+           }
+      });
+
+          
+
+            if( !ajx_success ){
+
+              // console.log( 'Oops something went wrong' );
+
+
+
+            }
+
+
+  },
+
+      dataType: 'json'
+
+      });
+
+    }
+
+
+
+
+
+
+    function populateApplicaitonFormTable( afstatus ){
+
+          if ( afstatus == ""){
+
+              afstatus = "Pending";
+          }
+
+          var program =    $("select#select_program :selected").val();
+          var year =       $("select#select_year :selected").val();
+
+          var campus =     $("select#select_campus :selected").val();
+          var shift =      $("select#select_shift :selected").val();
+          var department = $("select#select_department :selected").val();
+
+          var req_data = { 
+
+                 program  : program, 
+
+                 afstatus : afstatus,
+
+                 year       : year,
+                 campus     : campus,
+                 shift      : shift,
+                 department : department,
+
+                 action   : PLUGIN_PUBLIC.view_table_action
+
+             }
+
+
+             //console.log(req_data);
+
+          var ajx_url = PLUGIN_PUBLIC.ajx_req_url;
+
+          var ajx_success = false;
+
+          var table = applicationFormTable;
+
+          $("div#softcodic-loader").show();
+
+      jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+          beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', PLUGIN_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 ajx_success = true;
+                 console.log("i am successfull");
+
+                 table.clear().draw();
+                 $("div#softcodic-loader").hide();
+                
+
+                
+                 if( result.response == "success" ) {
+
+
+              if( result.data.length > 0){
+
+
+                 for(var i=0; i< result.data.length; i++){
+
+                        console.log(i);
+                        let applicant = result.data[i];
+
+                      /*  let drow = jQuery('<tr>'+
+                          '<td >'+applicant.name+' D/S/O '+applicant.father_name+' '+applicant.surname+'</td>'+
+                          '<td>'+applicant.mobile+' <br /> '+applicant.cnic+' <br/> '+applicant.matric+' <br/> '+applicant.lastdegree+' <br /> '+applicant.edit_docs+'</td>'+
+                          '<td>'+applicant.department+' <br/> '+applicant.domicile+'</td>'+
+                          '<td>'+applicant.edit_challan+'<br />'+applicant.form+' <br/> '+applicant.documents+' <br/> '+applicant.challan+'</td>'+
+                          '<td>'+applicant.payment_status+'</td>'+
+                          '<td>'+applicant.application_status+'</td>'+
+                       '</tr>'); */
+                        /*
+
+                       let drow = jQuery('<tr>'+
+                          '<td >'+applicant.name+'</td>'+
+                          '<td>'+applicant.father_name+'</td>'+
+                          '<td>'+applicant.surname+'</td>'+
+                          '<td>'+applicant.cnic+'</td>'+
+                          '<td>'+applicant.department+'</td>'+
+                          '<td>'+applicant.remarks+'</td>'+
+                          '<td>'+applicant.payment_status+'</td>'+
+                       '</tr>'); */
+                     
+
+                       let drow = jQuery('<tr>'+
+                          '<td >'+applicant.name+' D/S/O '+applicant.father_name+' '+applicant.surname+' <br /> '+applicant.cnic+' <br />cell# '+applicant.mobile+'</td>'+
+                          '<td>'+applicant.matric+' <br/> '+applicant.lastdegree+' <br /> '+applicant.merit+' <br />'+applicant.edit_docs+'</td>'+
+                          '<td>'+applicant.department+' <br/> '+applicant.domicile+'</td>'+
+                          '<td>'+applicant.edit_challan+'<br />'+applicant.form+' <br/> '+applicant.documents+' <br/> '+applicant.challan+'</td>'+
+                          '<td>'+applicant.remarks+'</td>'+
+                          '<td>'+applicant.payment_status+'</td>'+
+                          '<td>'+applicant.application_status+'</td>'+
+                       '</tr>'); 
+
+                      table.row.add(drow);
+                }
+
+                   table.draw();
+
+              /*   jQuery.each(result.data, function ( i, applicant ) {
+
+                      console.log(i);
+                      table.row.add(
+
+                       
+
+                        jQuery('<tr>'+
+                          '<td >'+applicant.name+' D/S/O '+applicant.father_name+' '+applicant.surname+'</td>'+
+                          '<td>'+applicant.mobile+' <br /> '+applicant.cnic+' <br/> '+applicant.matric+' <br/> '+applicant.edit_docs+'</td>'+
+                          '<td>'+applicant.department+' <br/> '+applicant.domicile+'</td>'+
+                          '<td>'+applicant.form+' <br/> '+applicant.documents+' <br/> '+applicant.challan+'</td>'+
+                          '<td>'+applicant.payment_status+'</td>'+
+                          '<td>'+applicant.application_status+'</td>'+
+                       '</tr>')
+                   ).draw();
+
+     
+
+
+    });*/
+
+
+
+ } //length
+
+  
+}
+
+           
+},
+
+        fail : function( response ) {
+
+            //console.log( response );
+            $("div#softcodic-loader").hide();
+
+         },
+
+
+
+        complete: function(){
+
+
+            console.log("i am complete now");
+
+            $("div#softcodic-loader").hide();
+
+            
+
+            $("select#select_payment_status").on('change', function(){
+
+            var app_id = $(this).attr('data-aid');
+            var status = $(this).val();
+            //console.log(app_id+" "+status);
+
+           var conf_res =  confirm("Are you sure to change payment status to "+status+" ?");
+
+           if ( conf_res ){
+              
+              updateApplicationPaymentStatus( app_id, status );
+               
+           } else {
+
+             $(this).val($.data(this, 'current'));
+           }
+      });
+
+            $("select#select_af_status").on('change', function(){
+
+            var app_id = $(this).attr('data-aid');
+            var status = $(this).val();
+            //console.log(app_id+" "+status);
+
+          /* var conf_res =  confirm("Are you sure to change status to "+status+" ?");
+
+           if ( conf_res ){
+              
+              updateApplicationStatus( app_id, status );
+               
+           } else {
+
+             $(this).val($.data(this, 'current'));
+           } */
+
+           var remarks = prompt("Remarks/Reason:", "");
+
+              if ( remarks !=null){
+              updateApplicationStatus( app_id, status, remarks);
+              } else {
+               
+               $(this).val($.data(this, 'current'));
+            }
+
+
+      });
+
+
+            if( !ajx_success ){
+
+              // console.log( 'Oops something went wrong' );
+
+
+
+            }
+
+
+  },
+
+      dataType: 'json'
+
+      });
+
+
+    }
+
+
+
+function updateAdmissionPaymentStatus( app_id, status ){
+
+
+          var req_data = { 
+
+                 app_id  : app_id, 
+
+                 status : status,
+
+                 aftype  :  'admission_fees',
+
+                 action   : 'action_update_adm_status'
+
+             }
+          
+          
+
+          var ajx_url = PLUGIN_PUBLIC.ajx_req_url;
+
+          var ajx_success = false;
+
+          console.log(req_data);
+          $("div#softcodic-loader").show();
+
+      jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+          beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', PLUGIN_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 ajx_success = true;
+                  console.log(result);
+                 $("div#softcodic-loader").hide();
+                
+                  
+                
+                 if( result == "success" ) {
+
+                  isAppFinal = true;
+
+  
+                }
+
+           
+},
+
+        fail : function( response ) {
+
+            //console.log( response );
+            $("div#softcodic-loader").hide();
+
+         },
+
+
+
+        complete: function(){
+
+            $("div#softcodic-loader").hide();
+
+         
+
+
+            if( !ajx_success ){
+
+              // console.log( 'Oops something went wrong' );
+
+
+
+            }
+
+
+  },
+
+      dataType: 'text'
+
+      });
+
+}
+
+
+function updateApplicationPaymentStatus( app_id, status ){
+         
+
+          var req_data = { 
+
+                 app_id  : app_id, 
+
+                 status : status,
+
+                 aftype  :  'application_form',
+
+                 action   : PLUGIN_PUBLIC.status_change_action
+
+             }
+          
+          
+
+          var ajx_url = PLUGIN_PUBLIC.ajx_req_url;
+
+          var ajx_success = false;
+
+          //console.log(req_data);
+          $("div#softcodic-loader").show();
+
+      jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+          beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', PLUGIN_PUBLIC.nonce );
+
+            },
+
+        success: function( result ) { 
+
+                 ajx_success = true;
+                // console.log(result);
+                 $("div#softcodic-loader").hide();
+                
+                  
+                
+                 if( result == "success" ) {
+
+                  isAppFinal = true;
+
+  
+                }
+
+           
+},
+
+        fail : function( response ) {
+
+            //console.log( response );
+            $("div#softcodic-loader").hide();
+
+         },
+
+
+
+        complete: function(){
+
+            $("div#softcodic-loader").hide();
+
+         
+
+
+            if( !ajx_success ){
+
+              // console.log( 'Oops something went wrong' );
+
+
+
+            }
+
+
+  },
+
+      dataType: 'text'
+
+      });
+
+
+}
+
+
+function updateApplicationStatus( app_id, status, remarks ){
+
+
+      var req_data = { 
+
+                 app_id  : app_id, 
+
+                 status  : status,
+                 remarks : remarks,
+
+                 action   : PLUGIN_PUBLIC.status_change_action
+
+             }
+
+          var ajx_url = PLUGIN_PUBLIC.ajx_req_url;
+
+          var ajx_success = false;
+    
+          //console.log(req_data);
+          
+          $("div#softcodic-loader").show();
+
+      jQuery.ajax({
+
+        type : "POST",
+
+        url  : ajx_url,
+
+        data : req_data,
+
+
+
+          beforeSend: function ( xhr ) {
+
+                xhr.setRequestHeader( 'X-WP-Nonce', PLUGIN_PUBLIC.nonce );
+                //console.log('before send');
+
+            },
+
+        success: function( result ) { 
+
+                 ajx_success = true;
+                 //console.log(result);
+                 $("div#softcodic-loader").hide();
+                
+                  
+                
+                 if( result == "success" ) {
+
+                  isAppFinal = true;
+
+  
+                }
+
+           
+},
+
+        fail : function( response ) {
+
+            //console.log( response );
+            $("div#softcodic-loader").hide();
+
+         },
+
+
+
+        complete: function(){
+
+            $("div#softcodic-loader").hide();
+
+         
+
+
+            if( !ajx_success ){
+
+              // console.log( 'Oops something went wrong' );
+
+
+
+            }
+
+
+  },
+
+      dataType: 'text'
+
+      });
+
+
+
+        
+}
+
+     
+
+
+
+
+      function randomStr(len) { 
+
+        var arr = "123456789abcdefghijklmnopqrstuvwzyZ";
+            var ans = ''; 
+            for (var i = len; i > 0; i--) { 
+                ans +=  
+                  arr[Math.floor(Math.random() * arr.length)]; 
+            } 
+            return ans; 
+        } 
+
+
+     function validateForm( formname, form ){
+
+       $("div#"+formname+"_error_msgs").hide();
+       $("div#"+formname+"_error_msgs").html('Validation errors occurred. Please confirm the fields and submit it again.');
+                   
+       
+        var valid = true;
+
+        if (formname == "form_adduser"){
+        let email_valid = /[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}/igm;
+
+        // Check email format
+        if ('email' === $(this).attr('type')) {
+          if (!email_valid.test($(this).val())) {
+            $(this).addClass('invalid');
+            valid = false;
+          }
+        }
+
+       let $pw = $('input[name=password]');
+       let $repeat_pw = $('input[name=repeat_password]');
+
+
+
+        if ($pw.val() !== $repeat_pw.val() || $pw.val().length < 8 ) {
+          $pw.addClass('invalid');
+          $repeat_pw.addClass('invalid');
+          valid = false;
+        }
+
+       }
+ 
+
+         if (formname == "af_personalinfo1" ){
+
+            if(!$("img#af_user_image").is(":visible")){
+               $("div#image-validate-error").show();
+               valid = false;
+            }
+         }
+       
+        form.find('input.required').each(function () {
+				
+                // Check empty value
+    				if (!$(this).val()) {
+    					$(this).addClass('invalid');
+    					valid = false;
+    				}
+
+    				if($(this).attr('id') === "af_cnic_bform"){
+
+    					 if ($(this).val().length < 15 ) {
+    						$(this).addClass('invalid');
+    						valid = false;
+    					}
+
+    				}
+
+				// Check email format
+				if ('af_father_contactno' === $(this).attr('id')) {
+					
+					if ($(this).val().length < 12 ) {
+						$(this).addClass('invalid');
+						valid = false;
+					}
+
+				}
+
+
+		});
+
+
+		 form.find('select.required').each(function () {
+				
+               
+        if ($(this).val() === null || $(this).val() === "") {
+          $(this).addClass('invalid');
+					valid = false;
+				}
+
+
+		});
+
+
+        if( formname == "af_departments" || formname == "af_departments_choices"){
+            
+            var dselection = new Array(); 
+            form.find('select.form-control').each(function (i) {
+
+                
+                 if( dselection.includes( $(this).val() ) ){ 
+                    
+                    $(this).addClass('invalid');
+                    valid = false;
+                 }
+
+                    if ($(this).val() != "" ){
+                      dselection[i] = $(this).val();
+                    }
+            });
+
+        }
+
+
+       if( formname == "af_acedemic" ){
+
+           if( $("select#last_degree").val() == "hsc"){
+
+
+           
+           if ( $("select#af_lastdegree_major_select").val() === null 
+                || $("select#af_lastdegree_major_select").val() === ""
+               ) {
+                $("select#af_lastdegree_major_select").addClass('invalid');
+                valid = false;
+           }
+
+         } else { 
+
+           if  ( $("input#af_lastdegree_major_input").val() === null 
+                || $("input#af_lastdegree_major_input").val() === "" ){
+
+               $("input#af_lastdegree_major_input").addClass('invalid');
+                valid = false;
+           }
+
+        }
+           
+
+            if ( !validateMarks(form, $("input[name='programOptions']:checked").val()) ){
+
+                 valid = false;
+            }
+        }
+
+
+
+
+        if(!valid){
+
+        	$("div#"+formname+"_error_msgs").show();
+        }
+
+		return valid;
+
+
+
+}
+     
+  
+
+
+
+	
+
+})( jQuery ); 
+
+
+
+
+
+
+
+

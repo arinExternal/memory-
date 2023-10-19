@@ -1,0 +1,381 @@
+/*
+ Theme Name:   Eduma Child
+ Theme URI:    http://educationwp.thimpress.com/
+ Description:  Eduma Child Theme
+ Author:       ThimPress
+ Author URI:   http://thimpress.com
+ Template:     eduma
+ Version:      1.0.0
+ Text Domain:  eduma-child
+*/
+
+
+
+
+/* CUSTOM START */
+
+
+.thim-popup-inner  form input[type=text],
+.thim-popup-inner  form input[type=email],
+.thim-popup-inner  form input[type=password],
+.thim-popup-inner  form input[type=phone]{
+
+	line-height: 25px !important;
+	min-height: 35px  !important;
+}
+
+
+form input[type=phone] {
+    width: 100%;
+    line-height: 25px;
+    padding: 4px 20px;
+    border: 1px solid #e5e5e5;
+    color: #999;
+    margin-bottom: 20px;
+    clear: both;
+    display: block;
+    min-height: 35px;
+    border-radius: 0;
+    -webkit-transition: all .3s ease-in-out;
+    -khtml-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+
+form input[type=number] {
+    width: 100%;
+    line-height: 25px;
+    padding: 4px 20px;
+    border: 1px solid #e5e5e5;
+    color: #999;
+    margin-bottom: 20px;
+    clear: both;
+    display: block;
+    min-height: 35px;
+    border-radius: 0;
+    -webkit-transition: all .3s ease-in-out;
+    -khtml-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+
+
+
+
+
+.sc_heading{margin:0; padding-top:10px !important }
+
+
+footer .thim-social {
+	padding-left: 107px;
+}
+footer .contact {
+	
+	 padding-left: 100px;
+}
+
+footer .email {
+	
+	 padding-left: 100px;
+}
+
+footer .row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+h4.widget-title {
+    color: #000 !important;
+    margin-bottom: 0 !important;
+}
+.tc-megamenu-wrapper.tc-megamenu-holder.mega-sub-menu.sub-menu {
+    border-bottom: 4px solid #772648;
+}
+.navbar-nav li.tc-menu-layout-builder .sub-menu .widget-title{
+	border-bottom: 2px solid #aab869;
+    padding-bottom: 5px;
+}
+.tc-megamenu-wrapper.tc-megamenu-holder.mega-sub-menu.sub-menu {
+    min-width: 980px;
+}
+.footer .container {
+    width: 1366px !important;
+    max-width: 100% !important;
+}
+aside#text-1210020 .textwidget{
+	width: 280px;
+}
+
+footer#colophon .mc4wp-form input[type=email], footer#colophon .mc4wp-form input[type=text]{
+	    background: #ffffff;
+		border:1px solid #000;
+
+}
+aside#text-1210019 img{
+	width:100px;
+}
+.navigation .width-navigation .navbar-nav > li .sub-menu li > a {
+    line-height: 1.5;
+    font-size: 14px;
+    padding-bottom: 0;
+}
+.tc-megamenu-wrapper>.vc_row>.vc_column_container:after{
+	    top: 80px;
+    background: #7726482b;
+    min-height: 1px !important;
+}
+.navigation .width-navigation .navbar-nav > li .sub-menu{
+	padding-top:0;
+}
+li.menu-item.menu-item-type-custom.menu-item-object-custom.menu-item-9038.tc-menu-item.tc-menu-depth-0.tc-menu-align-left.tc-menu-layout-builder .tc-megamenu-wrapper.tc-megamenu-holder.mega-sub-menu.sub-menu {
+    min-width: 500px;
+}
+li.menu-item.menu-item-type-custom.menu-item-object-custom.menu-item-9157.tc-menu-item.tc-menu-depth-0.tc-menu-align-left.tc-menu-layout-builder .tc-megamenu-wrapper.tc-megamenu-holder.mega-sub-menu.sub-menu {
+    min-width: 500px;
+}
+
+.logo-widget img {
+    width: auto;
+	
+}
+/*
+.wpb_single_image.wpb_content_element.vc_align_left {
+    margin-bottom: 10px;
+}*/
+
+.marginbotton0 {
+    margin-bottom: 0px;
+}
+
+aside#thim_layout_builder-4 {
+    padding-top: 0 !important;
+}
+aside#thim_layout_builder-4 p {
+    margin: 0;
+}
+aside#social-2 {
+    margin-top: 7px;
+}
+aside#text-1210022 p {
+    width: 410px;
+    position: relative;
+}
+aside#text-1210022 p:before {content: "\f10d";font-family: "FontAwesome";position: absolute;left: -20px;top: 0;font-size: 20px;opacity: .6;}
+.thim-register-now-form .title:before{
+	z-index:-1;
+}
+aside#text-1210022 p:after {content: "\f10e";font-family: FontAwesome;font-size: 20px;opacity: .6;}
+.wpb_text_column.wpb_content_element.sub-menu-main__title {
+    margin-bottom: 0;
+    margin-top: 17px;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 29px;
+    text-align: left;
+    color: #333;
+    border-bottom: 3px solid #ea4c89;
+    padding-bottom: 10px;
+}
+.sub-menu__left-pad {
+    padding-left: 15px;
+}
+.vc_wp_custommenu.wpb_content_element.sub-menu__left-pad.sub-third__menu {
+    padding-left: 0;
+    margin-top: 80px;
+}
+div.wpforms-container-full .wpforms-form input[type=date], div.wpforms-container-full .wpforms-form input[type=datetime], div.wpforms-container-full .wpforms-form input[type=datetime-local], div.wpforms-container-full .wpforms-form input[type=email], div.wpforms-container-full .wpforms-form input[type=month], div.wpforms-container-full .wpforms-form input[type=number], div.wpforms-container-full .wpforms-form input[type=password], div.wpforms-container-full .wpforms-form input[type=range], div.wpforms-container-full .wpforms-form input[type=search], div.wpforms-container-full .wpforms-form input[type=tel], div.wpforms-container-full .wpforms-form input[type=text], div.wpforms-container-full .wpforms-form input[type=time], div.wpforms-container-full .wpforms-form input[type=url], div.wpforms-container-full .wpforms-form input[type=week], div.wpforms-container-full .wpforms-form select, div.wpforms-container-full .wpforms-form textarea{
+	max-width:100% !important;
+}
+button#wpforms-submit-9234 {
+    background-color: #ea4c89;
+    color: #fff;
+	text-transform: uppercase;
+	line-height:1.5;
+    width: 100%;
+}
+aside#text-1210022 p {
+    width: 410px;
+}
+.address i, .email i, .contact i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+
+li.menu-item.menu-item-type-custom.menu-item-object-custom.menu-item-9157.tc-menu-item.tc-menu-depth-0.tc-menu-align-left.tc-menu-layout-builder h3 {
+    margin-top: 0;
+}
+.course-thumbnail a {
+    min-height: auto !important;
+}
+.thim-course-content {
+    margin-top: -10px;
+    padding-top: 20px !important;
+}
+section.elementor-element.elementor-element-e57d14e.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default.elementor-section.elementor-top-section {
+    margin-bottom: 70px;
+}
+li.menu-item.menu-item-type-custom.menu-item-object-custom.menu-item-9507.tc-menu-item.tc-menu-depth-0.tc-menu-align-left.tc-menu-layout-builder .tc-megamenu-wrapper.tc-megamenu-holder.mega-sub-menu.sub-menu.dropdown-menu-right {
+    min-width: 500px;
+}
+.wpb_wrapper p{
+	text-align:justify;
+}
+
+footer#colophon .copyright-area .text-copyright, footer#colophon .copyright-area .text-copyright a {
+    line-height: 30px;
+    text-align: center;
+}
+
+.thim-login form input[type=email].form-control, .thim-login form input[type=password].form-control, .thim-login form input[type=text].form-control, .thim-register form input[type=email].form-control, .thim-register form input[type=password].form-control, .thim-register form input[type=text].form-control, .thim-register form input[type=phone]{
+	width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    background-color: #fff;
+    margin-bottom:0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.thim-login form label{
+	font-weight: 400;
+}
+
+.thim-register form label {
+    font-weight: 400;
+    margin-bottom: 0px;
+    font-size: 14px;
+}
+
+
+.thim-register .form-group{
+	margin-bottom: 5px !important;
+}
+
+.thim-login .title, .thim-register .title{
+	font-size: 20px;
+    line-height: 34px;
+    margin: 0px 0 8px;
+}
+.plg-wrapper .left-menu-wrapper{
+	top: 20px;
+}
+.plg-wrapper .date-picker-weraper{
+	position: relative;
+}
+.plg-wrapper .date-picker-weraper .input-group-addon{
+	position:absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.plg-wrapper .panel-group .panel{
+	border-bottom:1px solid #c3c3c3;
+}
+.plg-wrapper .panel-group .panel:last-child{
+	border-bottom:0;
+}
+.plg-wrapper .panel-body .panel-footer{
+	display: flex;
+}
+.plg-wrapper form .invalid, .plg-wrapper form .validation-errors{
+	    display: block;
+    background: #ff00001c;
+    border: 1px solid red;
+    margin-bottom:15px;
+    color: red;
+}
+.plg-wrapper .left-menu-wrapper ul li a{
+	 display: block;
+    padding: 10px 20px;
+    color: #333;
+    background: #fafafa;
+}
+.plg-wrapper .left-menu-wrapper ul li.is-active a{
+	background: #5c8acb;
+    color: #fff;
+}
+.plg-wrapper .btn{
+	margin:7px;
+}
+@media screen and (max-width: 992px){
+	.plg-wrapper .sticky-wrapper .left-menu-toggler{
+		display: none;
+	}
+	.plg-wrapper .sticky-wrapper .left-menu-wrapper{
+		visibility: visible;
+		opacity: 1;
+		height: auto;
+		position: relative;
+	}
+}
+@media (max-width: 320px)
+.top_site_main .page-title-wrapper h1, .top_site_main .page-title-wrapper h2 {
+    font-size: 20px !important;
+    line-height: 30px !important;;
+}
+
+
+@media (max-width: 1200px){
+	.footer{
+		display:none !important;	
+	}
+}
+@media screen and (max-width: 1024px){
+	.top_site_main .page-title-wrapper h1, .top_site_main .page-title-wrapper h2{
+		font-size: 28px !important;
+		line-height: 34px !important;
+	}
+	.top_site_main, .top_site_main.top_site_overlay{
+		padding-top:0 !important;
+	}
+}
+@media screen and (max-width:768px){
+	.thim-course-carousel .owl-buttons{
+		position: absolute;
+		right: 15px !important;
+		top: -50px !important;
+		left: auto !important;
+	}
+}
+
+
+.top_site_main .page-title-wrapper {
+  top: -177px!important;
+    padding-bottom: 90px;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+}
+.top_site_main {
+    color: #fff;
+    position: relative;
+    background-size: cover;
+    background-position: center center;
+    background-color: rgba(45,51,57,.95);
+    min-height: 165px!important;
+	max-height:50px!important
+}
+
+@media screen and (max-width: 1024px){
+    .top_site_main .page-title-wrapper {
+    top: 5px!important;
+    padding-bottom: 90px;
+    text-align: left;
+    position: relative;
+    z-index: 1;
+}
+}
+
+
+
